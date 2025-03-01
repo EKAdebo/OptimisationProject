@@ -66,10 +66,12 @@ def main(objFuncs:List[Function], G:List[Constraint], H:List[Constraint],dimPoin
 
                 p.stopped = True
 
+        if len(T) == 0:
+            break
+
         points.extend(T)
 
-        if i%10 == 0:
-            print(f"Iter {i}, X length {len(X0)}")
+        print(f"Iter {i}, X length {len(points)}")
 
         points = KungMethod(points)
 
@@ -86,7 +88,7 @@ def displayResults(X0:List[Point], points:List[Point]):
 
     #Displays a plot of the original evaluations of the points vs the points that are found by the algorithm.
 
-    plt.subplot(2,1,1)
+    plt.subplot(2,2,1)
     for p in X0:
         plt.scatter(p.eval_f[0], p.eval_f[1], color='red',label = 'Original Points' if 'Original Points' not in plt.gca().get_legend_handles_labels()[1] else "")
     for p in points:
@@ -97,12 +99,29 @@ def displayResults(X0:List[Point], points:List[Point]):
     plt.title('ParetoFront')
     plt.legend()
 
-    plt.subplot(2,1,2)
+    plt.subplot(2,2,2)
     for p in points:
         plt.scatter(p.eval_f[0], p.eval_f[1], color='blue')
     plt.xlabel('f1')
     plt.ylabel('f2')
     plt.title('ParetoFront')
+
+
+    plt.subplot(2,2,3)
+    for p in X0:
+        plt.scatter(p.vector[0], p.vector[1], color='red',label = 'Original Points' if 'Original Points' not in plt.gca().get_legend_handles_labels()[1] else "")
+    for p in points:
+        plt.scatter(p.vector[0], p.vector[1], color='blue',label = 'Non-Dominated Points' if 'Non-Dominated Points' not in plt.gca().get_legend_handles_labels()[1] else "")
+
+    plt.xlabel('x1')
+    plt.ylabel('x2')
+    plt.title('ParetoFront')
+    plt.legend()
+
+    plt.subplot(2,2,4)
+    for p in points:
+        plt.scatter(p.vector[0], p.vector[1], color='blue')
+
     plt.show()
 ###############################################
 
@@ -118,7 +137,7 @@ def generatePoints(npoints:int, dim:int, objFuncs:List[Function]):
 
     Xorg = []
     for i in range(npoints):
-        x = Point(np.random.rand(dim))
+        x = Point(10*np.random.rand(dim))
         x.evaluate(objFuncs)
         Xorg.append(x)
     return Xorg
