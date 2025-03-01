@@ -1,30 +1,29 @@
 from math import floor
 from typing import List
 import numpy as np
-#from Functions import Function
 from Point import Point
-
 
 def compare(s:Point, R:List[Point]) -> bool:
     '''
-    Checks one vector for non-dominance against a list of vectors
+    Checks one point for non-dominance against a list of points
 
     INPUTS
-    R - set of vectors
+    R - list of vectors
     s - one vector
 
     OUPUT
     bool - True if s is not dominated by any vector in R, False otherwise
     '''
-
+    #The results of the functions evaluated at the point s
     eval_s = s.eval_f
+
     for r in R:
         eval_r = r.eval_f
         result =any([eval_s[i] < eval_r[i] for i in range(len(eval_s))])
 
         if  (not result):
-            return False 
-           
+            return False
+
     return True
 
 def Front(V:List[Point]) -> List[Point]:
@@ -32,55 +31,49 @@ def Front(V:List[Point]) -> List[Point]:
     A recursive function that finds the non-dominated vectors in V
 
     INPUTS
-    V -  vectors
+    V -  Set of points, assumed to be evaluated at the objective functions and sorted by the
 
     OUPUT
     M - The set of non-dominated vectors in V
     '''
-
+    #Dividing the list into two halves
     vSize = len(V)
+
+    #If there is only one point in the list, return it
+    if vSize == 1:
+        return V
+
     half = np.floor(vSize/2).astype(int)
 
+    #Formation of the two lists
+    R = Front(V[0:half])
+    S = Front(V[half:vSize])
 
-    if vSize == 1:
-        "dead end"
-        return V
-    
-    else:
-        R = Front(V[0:half])
-        S = Front(V[half:vSize])
-
-    R_val = [r.eval_f[0] for r in R]
-    S_val = [s.eval_f[0] for s in S]
-
-
+    #Finding the points in S that are non-dominated by R
     T = np.array([s for s in S if compare(s,R)] )
 
-    T_val = [t.eval_f[0] for t in T]
-    
     if T.size == 0:
         return R
-    
+
     R.extend(T)
 
     return R
 
-
-
 def KungMethod(V:List[Point]) -> List[Point]:
     '''
-    An implementation of Kung's method, it returns the set of non-dominated values in V
+    THis method takes in a set of points and returns the non-dominated ones.
+    It is an implementation of Kung's method.
     NOTE: This algorithm assumes a minimisation problem
-    
+
     INPUT
-    V - set of vectors
-    
+    V - A set of points assumed to be evaluated for the necessary objective functions
+
     OUPUT
-    set of non-dominated vectors
+    set of non-dominated points
     '''
 
+    #Sort of Points corresponding to the first objective function
     V.sort(key=lambda point: point.eval_f[0])
-
 
     nonDom = Front(V)
 
