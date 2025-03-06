@@ -10,6 +10,7 @@ class Point:
         self.f = []                         #Names of the functions evaluated
         self.eval_f = []                    #Evaluation of the functions at the point
         self.eval_d = []                    #Evaluation of the gradient of the functions at the point
+        self.reference = None               #Reference point for the point
 
     def evaluate(self, functions:List[Function]):
         #Evaluates the point with a set of functions
