@@ -1,6 +1,6 @@
 class Function:
     #Defines a function, and defined functions to call it on different points.
-    def __init__(self, func, func_g, name):
+    def __init__(self, func, func_g, name, problemType="Min"):
         #Initialises the function with a function, its gradient and a name
         self.func = func
         self.func_d = func_g

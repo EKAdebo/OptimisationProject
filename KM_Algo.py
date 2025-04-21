@@ -18,9 +18,11 @@ def compare(s:Point, R:List[Point]) -> bool:
     eval_s = s.eval_f
 
     for r in R:
+        #The results of the functions evaluated at the point r
         eval_r = r.eval_f
-        result =any([eval_s[i] < eval_r[i] for i in range(len(eval_s))])
 
+        #If the point s is dominated by r, return False
+        result =any([eval_s[i] < eval_r[i] for i in range(len(eval_s))])
         if  (not result):
             return False
 
